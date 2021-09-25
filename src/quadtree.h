@@ -15,11 +15,20 @@ public:
           valid(true)
     {
     }
-    std::string text()
+    std::string text() const
     {
         std::stringstream ss;
         ss << "(" << x << "," << y << ")";
         return ss.str();
+    }
+    bool operator==(const cPoint& o) const
+    {
+        float min = 0.01;
+        if( ! valid )
+            return false;
+        if( ! o.valid)
+            return false;
+        return fabs( x - o.x ) < min && fabs( y - o.y ) < min;
     }
 };
 
@@ -46,7 +55,7 @@ public:
     find(const cCell &range);
 
     /// text
-    std::string text( bool children = true );
+    std::string text( bool children = true ) const;
 
 private:
     cPoint center;  // point at center of cell
