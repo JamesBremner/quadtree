@@ -1,6 +1,6 @@
 # quadtree
 
-A quadtree is used to partition a two-dimensional space by recursively subdividing it into four quadrants or regions. The leaf cell conyains a point.  
+A quadtree is used to partition a two-dimensional space by recursively subdividing it into four quadrants or regions. The leaf cell contains a point.  
 
 https://en.wikipedia.org/wiki/Quadtree
 
