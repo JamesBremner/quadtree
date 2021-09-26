@@ -63,8 +63,9 @@ main()
 
             // construct quadtree of points
             cCell quadtree(cPoint(0, 0), 100);
-            for (auto &p : vp)
+            for (auto &p : vp) {
                 quadtree.insert(p);
+            }
 
             // quadtree search
             auto fp = quadtree.find(cCell(cPoint(10, 10), 2));

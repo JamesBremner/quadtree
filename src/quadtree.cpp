@@ -15,6 +15,17 @@ namespace quad
     {
     }
 
+    cCell::~cCell()
+    {
+        if (nw)
+        {
+            delete nw;
+            delete sw;
+            delete ne;
+            delete se;
+        }
+    }
+
     bool cCell::contains(const cPoint &p) const
     {
         if (!(center.x - dim <= p.x && p.x <= center.x + dim))
@@ -54,7 +65,8 @@ namespace quad
                 return true;
             }
         }
-        else if (myPoint == p) {
+        else if (myPoint == p)
+        {
             // point at same location as previously added
             //std::cout << "dup ";
             //throw std::runtime_error("dup");
@@ -81,7 +93,7 @@ namespace quad
             return true;
 
         std::cout << "quadtree insertion error\n"
-                  << p.text() << " " << text(false) << "\n";
+                  << p << " " << text(false) << "\n";
         throw std::runtime_error("quadtree insertion error");
     }
 
@@ -130,11 +142,11 @@ namespace quad
     {
         std::stringstream ss;
         if (myPoint.valid)
-            ss << "point " << myPoint.text();
+            ss << "point " << myPoint;
         else
             ss << "empty ";
         ss
-            << " in cell at " << center.text()
+            << " in cell at " << center
             << " size " << 2 * dim << "\n";
         if (children)
             if (nw)
@@ -146,4 +158,5 @@ namespace quad
             }
         return ss.str();
     }
+
 }
