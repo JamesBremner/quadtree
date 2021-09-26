@@ -8,6 +8,8 @@
 
 namespace quad
 {
+    std::vector<cPoint *> cCell::myPointsFound;
+
     cCell::cCell(const cPoint &p, float d)
         : center(p), dim(d / 2), nw(0)
     {
@@ -54,7 +56,7 @@ namespace quad
         }
         else if (myPoint == p) {
             // point at same location as previously added
-            std::cout << "dup ";
+            //std::cout << "dup ";
             //throw std::runtime_error("dup");
             return true;
         }
@@ -87,13 +89,12 @@ namespace quad
     cCell::find(const cCell &range)
     {
         raven::set::cRunWatch aWatcher("cCell::find");
-        std::vector<cPoint *> vp;
-        findrec(range, vp);
-        return vp;
+        myPointsFound.clear();
+        findrec(range);
+        return myPointsFound;
     }
     void cCell::findrec(
-        const cCell &range,
-        std::vector<cPoint *> &vp)
+        const cCell &range)
     {
         //std::cout << "look in " << text(false) << "\n";
 
@@ -106,16 +107,16 @@ namespace quad
             if (range.contains(myPoint))
             {
                 //std::cout << "found " << myPoint.text();
-                vp.push_back(&myPoint);
+                myPointsFound.push_back(&myPoint);
             }
         if (!nw)
             return;
 
         // find points in children and range
-        nw->findrec(range, vp);
-        sw->findrec(range, vp);
-        ne->findrec(range, vp);
-        se->findrec(range, vp);
+        nw->findrec(range);
+        sw->findrec(range);
+        ne->findrec(range);
+        se->findrec(range);
     }
     bool cCell::intersect(const cCell &range) const
     {

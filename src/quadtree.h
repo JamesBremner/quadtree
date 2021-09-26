@@ -65,13 +65,13 @@ private:
     cCell *sw;
     cCell *ne;
     cCell *se;
+    static std::vector<cPoint *> myPointsFound;
 
     bool contains(const cPoint &p) const;
     void subdivide();
     bool childInsert(const cPoint &p);
     bool intersect(const cCell &range) const;
     void findrec(
-        const cCell &range,
-        std::vector<cPoint *>& vp );
+        const cCell &range );
 };
 }

@@ -7,6 +7,7 @@
 
 #include "quadtree.h"
 
+// construct vector of randomly located points
 std::vector<quad::cPoint>
 random(int count)
 {
@@ -14,12 +15,12 @@ random(int count)
     for (int k = 0; k < count; k++)
         vp.push_back(
             quad::cPoint(
-                (rand() % 1800 - 1000) / 100.0,
-                (rand() % 1800 - 1000) / 100.0));
+                (rand() % 3800 - 2000) / 100.0,
+                (rand() % 3800 - 2000) / 100.0));
     return vp;
 }
 
-/// Linear earch point vector for neighbours
+/// Linear search point vector for neighbours
 std::vector<quad::cPoint *>
 search(
     std::vector<quad::cPoint> &vp,
@@ -47,29 +48,32 @@ main()
 
     using namespace quad;
 
-    std::cout << "quadtree\n";
+    std::cout << "quadtree performace test\n";
 
-    // construct vector of random points
-    std::vector<cPoint> vp = random(5000);
+    std::vector<int> testcounts { 100, 500, 1000, 5000, 10000 };
+    for (int count : testcounts )
+    {
 
-    // construct quadtree of points
-    cCell quadtree(cPoint(0, 0), 100);
-    for (auto &p : vp)
-        quadtree.insert(p);
+        std::cout << "\nPoint count " << count << "\n";
 
-    //std::cout << quadtree.text() << "\n";
+        for (int test = 0; test < 10; test++)
+        {
+            // construct vector of random points
+            std::vector<cPoint> vp = random(count);
 
-    // quadtree search
-    auto fp = quadtree.find(cCell(cPoint(10, 10), 2));
-    for (auto p : fp)
-        std::cout << p->text() << " ";
-    std::cout << "\n";
+            // construct quadtree of points
+            cCell quadtree(cPoint(0, 0), 100);
+            for (auto &p : vp)
+                quadtree.insert(p);
 
-    // vector search
-    fp = search(vp, quad::cPoint(10, 10), 2);
-    for (auto p : fp)
-        std::cout << p->text() << " ";
-    std::cout << "\n";
+            // quadtree search
+            auto fp = quadtree.find(cCell(cPoint(10, 10), 2));
 
-    raven::set::cRunWatch::Report();
+            // vector search
+            fp = search(vp, quad::cPoint(10, 10), 2);
+        }
+
+        raven::set::cRunWatch::Report();
+        raven::set::cRunWatch::Clear();
+    }
 }
