@@ -8,11 +8,12 @@
 
 namespace quad
 {
-    std::vector<cPoint *> cCell::myPointsFound;
+    std::vector<point_t > cCell::myPointsFound;
 
-    cCell::cCell(const cPoint &p, float d)
+    cCell::cCell(point_t p, float d)
         : center(p), dim(d / 2), nw(0)
     {
+        myPoint = point_t( new cPoint() );
     }
 
     cCell::~cCell()
@@ -26,37 +27,37 @@ namespace quad
         }
     }
 
-    bool cCell::contains(const cPoint &p) const
+    bool cCell::contains(point_t p) const
     {
-        if (!(center.x - dim <= p.x && p.x <= center.x + dim))
+        if (!(center->x - dim <= p->x && p->x <= center->x + dim))
             return false;
-        if (!(center.y - dim <= p.y && p.y <= center.y + dim))
+        if (!(center->y - dim <= p->y && p->y <= center->y + dim))
             return false;
         return true;
     }
     void cCell::subdivide()
     {
         float dim2 = dim / 2;
-        nw = new cCell(cPoint(center.x - dim2, center.y - dim2), dim);
-        sw = new cCell(cPoint(center.x - dim2, center.y + dim2), dim);
-        ne = new cCell(cPoint(center.x + dim2, center.y - dim2), dim);
-        se = new cCell(cPoint(center.x + dim2, center.y + dim2), dim);
+        nw = new cCell(point_t( new cPoint(center->x - dim2, center->y - dim2)), dim);
+        sw = new cCell(point_t( new cPoint(center->x - dim2, center->y + dim2)), dim);
+        ne = new cCell(point_t( new cPoint(center->x + dim2, center->y - dim2)), dim);
+        se = new cCell(point_t( new cPoint(center->x + dim2, center->y + dim2)), dim);
 
-        if (myPoint.valid)
+        if (myPoint->valid)
         {
             // move point to child
             childInsert(myPoint);
-            myPoint.valid = false;
+            myPoint->valid = false;
         }
     }
-    bool cCell::insert(const cPoint &p)
+    bool cCell::insert(point_t p)
     {
         // check point located in cell
         if (!contains(p))
             return false;
 
         // check cell is an empty leaf
-        if (!myPoint.valid)
+        if (!myPoint->valid)
         {
             if (!nw)
             {
@@ -81,7 +82,7 @@ namespace quad
         return true;
     }
 
-    bool cCell::childInsert(const cPoint &p)
+    bool cCell::childInsert(point_t p)
     {
         if (nw->insert(p))
             return true;
@@ -97,7 +98,7 @@ namespace quad
         throw std::runtime_error("quadtree insertion error");
     }
 
-    std::vector<cPoint *>
+    std::vector<point_t >
     cCell::find(const cCell &range)
     {
         raven::set::cRunWatch aWatcher("cCell::find");
@@ -115,11 +116,11 @@ namespace quad
             return;
 
         // heck if point in cell is in range
-        if (myPoint.valid)
+        if (myPoint->valid)
             if (range.contains(myPoint))
             {
                 //std::cout << "found " << myPoint.text();
-                myPointsFound.push_back(&myPoint);
+                myPointsFound.push_back(myPoint);
             }
         if (!nw)
             return;
@@ -132,8 +133,8 @@ namespace quad
     }
     bool cCell::intersect(const cCell &range) const
     {
-        float dx = center.x - range.center.x;
-        float dy = center.y - range.center.y;
+        float dx = center->x - range.center->x;
+        float dy = center->y - range.center->y;
         float d2 = dx * dx + dy * dy;
         return d2 < (dim + range.dim) * (dim + range.dim);
     }
@@ -141,7 +142,7 @@ namespace quad
     std::string cCell::text(bool children) const
     {
         std::stringstream ss;
-        if (myPoint.valid)
+        if (myPoint->valid)
             ss << "point " << myPoint;
         else
             ss << "empty ";
