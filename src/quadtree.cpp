@@ -100,7 +100,6 @@ namespace quad
     std::vector<cPoint *>
     cCell::find(const cCell &range)
     {
-        raven::set::cRunWatch aWatcher("cCell::find");
         myPointsFound.clear();
         findrec(range);
         return myPointsFound;

@@ -6,6 +6,7 @@ namespace quad
         float x;
         float y;
         bool valid;
+        int userData;
         cPoint()
             : valid(false)
         {
@@ -14,6 +15,13 @@ namespace quad
             : x(X),
               y(Y),
               valid(true)
+        {
+        }
+        cPoint(float X, float Y, int user)
+            : x(X),
+              y(Y),
+              valid(true),
+              userData(user)
         {
         }
         bool operator==(const cPoint &o) const
