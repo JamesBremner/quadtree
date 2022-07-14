@@ -45,7 +45,9 @@ namespace quad
     public:
         /** construct empty cell
      * @param[in] p location of cell center
-     * @param[in] dim dimension of cell
+     * @param[in] dim full dimension of cell
+     * 
+     * top left of cell at p.x - dim/2, p.y - dim/2
      */
         cCell(const cPoint &p, float dim);
 
