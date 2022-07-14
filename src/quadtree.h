@@ -80,6 +80,8 @@ namespace quad
                 << " size " << 2 * p.dim << "\n";
             return os;
         }
+        // true if two ranges intersect
+        bool intersect(const cCell &range) const;
 
     private:
         cPoint center;  // point at center of cell
@@ -94,7 +96,7 @@ namespace quad
         bool contains(const cPoint &p) const;
         void subdivide();
         bool childInsert(const cPoint &p);
-        bool intersect(const cCell &range) const;
+
         void findrec(
             const cCell &range);
     };
