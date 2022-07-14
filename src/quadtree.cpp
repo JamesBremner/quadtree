@@ -113,7 +113,7 @@ namespace quad
         if (!intersect(range))
             return;
 
-        // heck if point in cell is in range
+        // check if point in cell is in range
         if (myPoint.valid)
             if (range.contains(myPoint))
             {
