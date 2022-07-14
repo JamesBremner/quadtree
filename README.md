@@ -6,11 +6,14 @@ https://en.wikipedia.org/wiki/Quadtree
 
 # Performance Test
  
- Comparing performance of quadtree and simple search through vector of points in finding neighbours of a point.  If there are less than 100 points to search, the performance is similar, at less than a microsecond for each search.  For more than 100 points, the advantage of a quadtree becomes significant.
+ Comparing performance of quadtree and simple search through vector of points in finding neighbours of a point.  If there are less than 100 points to search, the performance is similar, at less than a microsecond for each search.  For more than 100 points, the advantage of a quadtree becomes significant, so long as you need to do enough searches to pay for the initial cost of building the tree.  All times in the table are microseconds
  
-![image](https://user-images.githubusercontent.com/2046227/134818240-1e938d00-7af7-475d-a1b1-dab31647592f.png)
+| Points | Vector search 1 point neighbors | Quadtree build | Quadtree search 1 point neighbors |
+|---|---|---|---|
+100 | 0.5 | 45 | 0.3
+500 | 2 | 161 | 0.4
+1000 | 5 | 325 | 1
+5000 | 20 | 1840 | 1
+10000 | 43 | 4000 | 3
 
 
-Here is the test code
-
-https://github.com/JamesBremner/quadtree/blob/3820f92b246981c8be9125909bd49057f138c159/src/test.cpp#L45-L79
