@@ -57,6 +57,11 @@ namespace quad
          */
         c3Cell(const c3Point &p, float dim);
 
+        c3Cell(
+            const c3Point &center,
+            float dim,
+            const std::vector< c3Point >& vp );
+
         ~c3Cell();
 
         /** insert point

@@ -13,9 +13,21 @@ namespace quad
     c3Cell::c3Cell(const c3Point &p, float d)
         : center(p), dim(d / 2), nwd(0)
     {
-        if( ! center.valid )
+        if (!center.valid)
             throw std::runtime_error(
                 "c3cell CTOR invalid point");
+    }
+
+    c3Cell::c3Cell(
+        const c3Point &center,
+        float dim,
+        const std::vector<c3Point> &vp)
+        : c3Cell(center, dim)
+    {
+        for (auto &p : vp)
+        {
+            insert(p);
+        }
     }
 
     c3Cell::~c3Cell()
@@ -45,7 +57,7 @@ namespace quad
     }
     void c3Cell::subdivide()
     {
-         float dim2 = dim / 2;
+        float dim2 = dim / 2;
         nwd = new c3Cell(c3Point(center.x - dim2, center.y - dim2, center.z - dim2), dim);
         swd = new c3Cell(c3Point(center.x - dim2, center.y + dim2, center.z - dim2), dim);
         ned = new c3Cell(c3Point(center.x + dim2, center.y - dim2, center.z - dim2), dim);
@@ -55,7 +67,7 @@ namespace quad
         neu = new c3Cell(c3Point(center.x + dim2, center.y - dim2, center.z + dim2), dim);
         seu = new c3Cell(c3Point(center.x + dim2, center.y + dim2, center.z + dim2), dim);
 
-        //std::cout << "subdiv\n" << *nwd << *swd << *ned << *sed << "\n";
+        // std::cout << "subdiv\n" << *nwd << *swd << *ned << *sed << "\n";
 
         if (myPoint.valid)
         {
@@ -73,7 +85,7 @@ namespace quad
         // check cell is an empty leaf
         if (!myPoint.valid)
         {
-            if ( isLeaf() )
+            if (isLeaf())
             {
                 // store point here
                 myPoint = p;
@@ -83,8 +95,8 @@ namespace quad
         else if (myPoint == p)
         {
             // point at same location as previously added
-            //std::cout << "dup ";
-            //throw std::runtime_error("dup");
+            // std::cout << "dup ";
+            // throw std::runtime_error("dup");
             return true;
         }
 
@@ -130,7 +142,7 @@ namespace quad
     void c3Cell::findrec(
         const c3Cell &range)
     {
-        // std::cout << "look for " << range.center 
+        // std::cout << "look for " << range.center
         //     << " in " << text(false) << "\n";
 
         // check that range and cell overlap
@@ -141,7 +153,7 @@ namespace quad
         if (myPoint.valid)
             if (range.contains(myPoint))
             {
-                //std::cout << "found " << myPoint;
+                // std::cout << "found " << myPoint;
                 myPointsFound.push_back(&myPoint);
             }
         if (!nwd)
@@ -172,7 +184,7 @@ namespace quad
         std::stringstream ss;
         if (myPoint.valid)
             ss << "point " << myPoint;
-        else if( ! isLeaf() )
+        else if (!isLeaf())
             ss << "parent ";
         else
             ss << "empty ";
