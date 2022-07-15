@@ -13,6 +13,9 @@ namespace quad
     c3Cell::c3Cell(const c3Point &p, float d)
         : center(p), dim(d / 2), nwd(0)
     {
+        if( ! center.valid )
+            throw std::runtime_error(
+                "c3cell CTOR invalid point");
     }
 
     c3Cell::~c3Cell()
@@ -42,8 +45,7 @@ namespace quad
     }
     void c3Cell::subdivide()
     {
-        //TODO
-        float dim2 = dim / 2;
+         float dim2 = dim / 2;
         nwd = new c3Cell(c3Point(center.x - dim2, center.y - dim2, center.z - dim2), dim);
         swd = new c3Cell(c3Point(center.x - dim2, center.y + dim2, center.z - dim2), dim);
         ned = new c3Cell(c3Point(center.x + dim2, center.y - dim2, center.z - dim2), dim);
@@ -52,6 +54,8 @@ namespace quad
         swu = new c3Cell(c3Point(center.x - dim2, center.y + dim2, center.z + dim2), dim);
         neu = new c3Cell(c3Point(center.x + dim2, center.y - dim2, center.z + dim2), dim);
         seu = new c3Cell(c3Point(center.x + dim2, center.y + dim2, center.z + dim2), dim);
+
+        //std::cout << "subdiv\n" << *nwd << *swd << *ned << *sed << "\n";
 
         if (myPoint.valid)
         {
@@ -69,7 +73,7 @@ namespace quad
         // check cell is an empty leaf
         if (!myPoint.valid)
         {
-            if (!nwd)
+            if ( isLeaf() )
             {
                 // store point here
                 myPoint = p;
@@ -126,7 +130,8 @@ namespace quad
     void c3Cell::findrec(
         const c3Cell &range)
     {
-        //std::cout << "look in " << text(false) << "\n";
+        // std::cout << "look for " << range.center 
+        //     << " in " << text(false) << "\n";
 
         // check that range and cell overlap
         if (!intersect(range))
@@ -136,7 +141,7 @@ namespace quad
         if (myPoint.valid)
             if (range.contains(myPoint))
             {
-                //std::cout << "found " << myPoint.text();
+                //std::cout << "found " << myPoint;
                 myPointsFound.push_back(&myPoint);
             }
         if (!nwd)
@@ -158,7 +163,8 @@ namespace quad
         float dy = center.y - range.center.y;
         float dz = center.z - range.center.z;
         float d2 = dx * dx + dy * dy + dz * dz;
-        return d2 < (dim + range.dim) * (dim + range.dim);
+        float dim2 = dim + range.dim;
+        return d2 < dim2 * dim2 * dim2;
     }
 
     std::string c3Cell::text(bool children) const
@@ -166,6 +172,8 @@ namespace quad
         std::stringstream ss;
         if (myPoint.valid)
             ss << "point " << myPoint;
+        else if( ! isLeaf() )
+            ss << "parent ";
         else
             ss << "empty ";
         ss

@@ -75,19 +75,13 @@ namespace quad
         /// text
         std::string text(bool children = true) const;
 
-        friend std::ostream &operator<<(std::ostream &os, c3Cell p)
-        {
-            if (p.myPoint.valid)
-                os << "point " << p.myPoint;
-            else
-                os << "empty ";
-            os
-                << " in cell at " << p.center
-                << " size " << 2 * p.dim << "\n";
-            return os;
-        }
         // true if two ranges intersect
         bool intersect(const c3Cell &range) const;
+
+        bool isLeaf() const
+        {
+            return nwd == 0;
+        }
 
     private:
         c3Point center;  // point at center of cell

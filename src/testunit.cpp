@@ -36,6 +36,21 @@ TEST( oct_intersect )
     );
 }
 
+TEST( oct_insert )
+{
+    // an empty leaf
+    c3Cell t( c3Point(5, 5, 5), 10 );
+    CHECK( t.isLeaf() );
+
+    // a leaf with a point
+    CHECK( t.insert( c3Point(4,4,4)));
+    CHECK( t.isLeaf() );
+
+    // a parent
+    CHECK( t.insert( c3Point(6,6,6)));
+    CHECK( ! t.isLeaf() );
+}
+
 TEST(quadtree)
 {
     std::vector<quad::cPoint> vp;
@@ -56,8 +71,14 @@ TEST(quadtree)
 
 TEST(octree)
 {
+    // construct point cloud
     std::vector<quad::c3Point> vp;
     vp.push_back(c3Point(5, 5, 5));
+    vp.push_back(c3Point(25, 5.1, 5));
+    vp.push_back(c3Point(25, 5.2, 5));
+    vp.push_back(c3Point(25, 5, 5.3));
+
+
     c3Cell octree(c3Point(0, 0, 0), 100);
     for (auto &p : vp)
     {
@@ -72,6 +93,11 @@ TEST(octree)
     r = octree.find(
         c3Cell(c3Point(4,4,7), 2));
     CHECK_EQUAL(0, r.size());
+
+    r.clear();
+    r = octree.find(
+        c3Cell(c3Point(25,5,5), 2));
+    CHECK_EQUAL(3, r.size());
 }
 
 int main()
