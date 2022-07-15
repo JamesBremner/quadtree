@@ -17,13 +17,14 @@ static_link_flags = -static-libstdc++ -static-libgcc -static
 ODIR = ./.vscode/obj
 RDIR = ../ravencode/pub/src
 
-OPT = -g
+OPT = -O2
 CCflags = -std=c++17 $(OPT) -D_mingw_
 
 # sources
 OBJ = \
 	$(ODIR)/test.o  \
 	$(ODIR)/quadtree.o \
+	$(ODIR)/octree.o \
 	$(ODIR)/cRunWatch.o
 OBJ_oct = \
 	$(ODIR)/testoctree.o  \

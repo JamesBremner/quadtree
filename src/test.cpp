@@ -6,8 +6,9 @@
 #include "cRunWatch.h"
 
 #include "quadtree.h"
+#include "octree.h"
 
-// construct vector of randomly located points
+// construct vector of randomly located 2D points
 std::vector<quad::cPoint>
 random(int count)
 {
@@ -15,6 +16,18 @@ random(int count)
     for (int k = 0; k < count; k++)
         vp.push_back(
             quad::cPoint(
+                (rand() % 3800 - 2000) / 100.0,
+                (rand() % 3800 - 2000) / 100.0));
+    return vp;
+}
+std::vector<quad::c3Point>
+random3(int count)
+{
+    std::vector<quad::c3Point> vp;
+    for (int k = 0; k < count; k++)
+        vp.push_back(
+            quad::c3Point(
+                (rand() % 3800 - 2000) / 100.0,
                 (rand() % 3800 - 2000) / 100.0,
                 (rand() % 3800 - 2000) / 100.0));
     return vp;
@@ -72,6 +85,35 @@ searchQuad(
 
     delete quadtree;
 }
+std::vector<quad::c3Point *>
+searchOct(
+    std::vector<quad::c3Point> &vp,
+    const quad::c3Point &center,
+    float dim)
+{
+    using namespace quad;
+
+    c3Cell* octree;
+
+    // construct octree of points
+    {
+        raven::set::cRunWatch aWatcher("construct_oct");
+        octree = new c3Cell(c3Point(0, 0, 0), 100);
+        for (auto &p : vp)
+        {
+            octree->insert(p);
+        }
+    }
+
+    // octree search
+    {
+        raven::set::cRunWatch aWatcher("search_oct");
+        return octree->find(
+            c3Cell(c3Point(10, 10, 10), dim));
+    }
+
+    delete octree;
+}
 
 main()
 {
@@ -97,6 +139,9 @@ main()
 
             // vector search
             fp = search(vp, quad::cPoint(10, 10), 2);
+
+            std::vector<c3Point> vp3 = random3(count);
+            auto f2p = searchOct(vp3, c3Point(10, 10, 10), 2);
         }
 
         raven::set::cRunWatch::Report();
