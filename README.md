@@ -12,7 +12,7 @@ A octree is used to partition a three-dimensional space by recursively subdividi
  
  Comparing performance of quadtree and simple search through vector of points in finding neighbours of a point.  If there are less than 100 points to search, the performance is similar, at less than a microsecond for each search.  For more than 100 points, the advantage of a quadtree becomes significant, so long as you need to do enough searches to pay for the initial cost of building the tree.  All times in the table are microseconds
  
-| Points | Vector search<br> 1 point neighbors | Quadtree build | Quadtree search<br> 1 point neighbors | Octree build | Octree search
+| Points | 2D Vector search<br> 1 point neighbors | Quadtree build | Quadtree search<br> 1 point neighbors | Octree build | Octree search
 |---|---|---|---|---|---|
 100 | 0.5 | 45 | 0.3| 64| 1
 500 | 2 | 161 | 0.4||
