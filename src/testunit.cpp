@@ -11,11 +11,11 @@ using namespace quad;
 TEST(quad_intersect)
 {
     // test range: 10 unit square centred at 5,5
-    cCell range(cPoint(5, 5), 10);
-    cCell p1(cPoint(5, 5), 1);
+    cCell range(cxy(5, 5), 10);
+    cCell p1(cxy(5, 5), 1);
     CHECK(
         range.intersect(p1));
-    cCell p2(cPoint(50, 50), 1);
+    cCell p2(cxy(50, 50), 1);
     CHECK(
         !range.intersect(p2));
 }
@@ -49,19 +49,19 @@ TEST(oct_insert)
 
 TEST(quadtree)
 {
-    std::vector<quad::cPoint> vp;
-    vp.push_back(cPoint(5, 5));
-    cCell quadtree(cPoint(0, 0), 100);
+    std::vector<cxy> vp;
+    vp.push_back(cxy(5, 5));
+    cCell quadtree(cxy(0, 0), 100);
     for (auto &p : vp)
     {
         quadtree.insert(p);
     }
     auto r = quadtree.find(
-        cCell(cPoint(4, 4), 2));
+        cCell(cxy(4, 4), 2));
     CHECK_EQUAL(1, r.size());
     r.clear();
     r = quadtree.find(
-        cCell(cPoint(1, 1), 2));
+        cCell(cxy(1, 1), 2));
     CHECK_EQUAL(0, r.size());
 }
 

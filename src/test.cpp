@@ -5,17 +5,18 @@
 
 #include "cRunWatch.h"
 
+#include "cxy.h"
 #include "quadtree.h"
 #include "octree.h"
 
 // construct vector of randomly located 2D points
-std::vector<quad::cPoint>
+std::vector<cxy>
 random(int count)
 {
-    std::vector<quad::cPoint> vp;
+    std::vector<cxy> vp;
     for (int k = 0; k < count; k++)
         vp.push_back(
-            quad::cPoint(
+            cxy(
                 (rand() % 3800 - 2000) / 100.0,
                 (rand() % 3800 - 2000) / 100.0));
     return vp;
@@ -34,14 +35,14 @@ random3(int count)
 }
 
 /// Linear search point vector for neighbours
-std::vector<quad::cPoint *>
+std::vector<cxy *>
 search(
-    std::vector<quad::cPoint> &vp,
-    const quad::cPoint &center,
+    std::vector<cxy> &vp,
+    const cxy &center,
     float dim)
 {
     raven::set::cRunWatch aWatcher("vector_search");
-    std::vector<quad::cPoint *> fp;
+    std::vector<cxy *> fp;
     float dim2 = dim / 2;
     for (auto &tp : vp)
     {
@@ -56,10 +57,10 @@ search(
 }
 
 /// Search point vector for neighbours using quadtree
-std::vector<quad::cPoint *>
+std::vector<cxy *>
 searchQuad(
-    std::vector<quad::cPoint> &vp,
-    const quad::cPoint &center,
+    std::vector<cxy> &vp,
+    const cxy &center,
     float dim)
 {
     using namespace quad;
@@ -69,7 +70,7 @@ searchQuad(
     // construct quadtree of points
     {
         raven::set::cRunWatch aWatcher("construct_quad");
-        quadtree = new cCell(cPoint(0, 0), 100);
+        quadtree = new cCell(cxy(0, 0), 100);
         for (auto &p : vp)
         {
             quadtree->insert(p);
@@ -80,7 +81,7 @@ searchQuad(
     {
         raven::set::cRunWatch aWatcher("search_quad");
         return quadtree->find(
-            cCell(cPoint(10, 10), dim));
+            cCell(cxy(10, 10), dim));
     }
 
     delete quadtree;
@@ -132,13 +133,13 @@ main()
         for (int test = 0; test < 10; test++)
         {
             // construct vector of random points
-            std::vector<cPoint> vp = random(count);
+            std::vector<cxy> vp = random(count);
 
             // quadtree search
-            auto fp = searchQuad(vp, cPoint(10, 10), 2);
+            auto fp = searchQuad(vp, cxy(10, 10), 2);
 
             // vector search
-            fp = search(vp, quad::cPoint(10, 10), 2);
+            fp = search(vp, cxy(10, 10), 2);
 
             std::vector<c3Point> vp3 = random3(count);
             auto f2p = searchOct(vp3, c3Point(10, 10, 10), 2);
