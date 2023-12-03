@@ -70,7 +70,7 @@ namespace quad
          */
         bool insert(const c3Point &p);
 
-        /** find points in region
+        /**     
          * @param[in] region
          * @return vector of pointers to points in region
          */
@@ -106,6 +106,7 @@ namespace quad
         void subdivide();
         bool childInsert(const c3Point &p);
 
+        /// find points in region, recursive
         void findrec(
             const c3Cell &range);
     };

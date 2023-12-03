@@ -5,7 +5,7 @@ VPATH = ./src
 INCS = -I./include \
 	-I../ravencode/pub/src \
 	-I../raven-set \
-	-I../boost/boost1_78 
+	-I../../code_ext/boost/boost1_78 \
 
 LIBS = \
 	-lgdiplus -lgdi32 -lcomdlg32 -lstdc++fs \
