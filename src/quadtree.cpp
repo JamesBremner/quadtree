@@ -131,10 +131,16 @@ namespace quad
     }
     bool cCell::intersect(const cCell &range) const
     {
+        // calculate distance squared between centers
         float dx = center.x - range.center.x;
         float dy = center.y - range.center.y;
         float d2 = dx * dx + dy * dy;
-        return d2 < (dim + range.dim) * (dim + range.dim);
+
+        // calculate max distance squared between centers
+        // that still has an overlap in the corners of the cells
+        float dmax = 2 * (dim + range.dim) * (dim + range.dim);
+
+        return d2 <= dmax;
     }
 
     std::string cCell::text(bool children) const
